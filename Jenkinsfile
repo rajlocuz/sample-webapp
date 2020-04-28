@@ -19,6 +19,7 @@ pipeline {
         sh 'rm trufflehog || true'
         sh 'docker run rajlocuz/trufflehog --json https://github.com/rajlocuz/webapp.git > trufflehog'
         sh 'cat trufflehog'
+	input 'Do you want to proceed?'
       }
     
     }
