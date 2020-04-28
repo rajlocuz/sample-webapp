@@ -46,16 +46,18 @@ pipeline {
             sh 'mvn failsafe:integration-test'
           }
         }
-        post {
+     }
+     post {
           always {
             junit 'target/surefire-reports/TEST-*.xml'
           }
-        //failure {
+
+	
+	//failure {
           //  mail to: 'kiwaczki@gmail.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
        // }
        }
-     }
-   }   
+     }   
  
     stage ('Deploy-to-Tomcat') {
       steps {
