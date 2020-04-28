@@ -34,10 +34,10 @@ pipeline {
       }
     }
     stage ('Tests') {
-      Parallel {
+      parallel {
     	stage('Unit Tests') {
       	  steps {
-          sh 'mvn surefire:test'
+            sh 'mvn surefire:test'
           } 
         }
 
