@@ -45,6 +45,7 @@ pipeline {
         stage('Integration Tests') {
           steps {
             sh 'mvn failsafe:integration-test'
+	    input 'Do you wish to continue?'
           }
         }
      }
@@ -59,9 +60,6 @@ pipeline {
          //input 'Do you want to proceed?'
        }
     }
-     steps {
-       input 'Do you wish to continue?'
-     }
    }   
  
     stage ('Deploy-to-Tomcat') {
