@@ -34,6 +34,7 @@ pipeline {
       }
     }
     stage ('Tests') {
+      failFast true	
       parallel {
     	stage('Unit Tests') {
       	  steps {
@@ -50,14 +51,15 @@ pipeline {
      post {
        always {
          junit 'target/surefire-reports/TEST-*.xml'
-	 input 'Do you want to proceed?'
+	 //input 'Do you want to proceed?'
        }
 
        failure {
          mail to: 'raj.singh@locuz.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
-         input 'Do you want to proceed?'
+         //input 'Do you want to proceed?'
        }
     }
+     input 'Do you wish to continue?'
    }   
  
     stage ('Deploy-to-Tomcat') {
