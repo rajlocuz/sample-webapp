@@ -59,7 +59,9 @@ pipeline {
          //input 'Do you want to proceed?'
        }
     }
-     input 'Do you wish to continue?'
+     steps {
+       input 'Do you wish to continue?'
+     }
    }   
  
     stage ('Deploy-to-Tomcat') {
