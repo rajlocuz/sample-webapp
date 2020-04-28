@@ -46,7 +46,6 @@ pipeline {
             junit 'build/reports/**/*.xml'
         }
     }
-}
     
     stage ('Deploy-to-Tomcat') {
       steps {
