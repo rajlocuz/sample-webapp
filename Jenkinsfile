@@ -44,22 +44,20 @@ pipeline {
 
         stage('Integration Tests') {
           steps {
-            sh 'mvn failsafe:integration-test || true'
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            sh 'mvn failsafe:integration-test'
+       //     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
 	      input 'Do you wish to continue?'
-            }
+         //   }
           }
         }
      }
      post {
        always {
-         junit 'target/surefire-reports/TEST-*.xml'
-	 //input 'Do you want to proceed?'
+         junit allowEmptyResults: true, 'target/surefire-reports/TEST-*.xml'
        }
 
        failure {
          mail to: 'raj.singh@locuz.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
-         //input 'Do you want to proceed?'
        }
     }
    }   
