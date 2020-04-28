@@ -51,7 +51,7 @@ pipeline {
           }
         }
      }
-/*     post {
+     post {
        always {
          junit 'target/surefire-reports/TEST-*.xml'
 	 //input 'Do you want to proceed?'
@@ -61,7 +61,7 @@ pipeline {
          mail to: 'raj.singh@locuz.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
          //input 'Do you want to proceed?'
        }
-    }*/
+    }
    }   
  
     stage ('Deploy-to-Tomcat') {
