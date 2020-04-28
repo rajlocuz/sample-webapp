@@ -33,19 +33,17 @@ pipeline {
         sh 'mvn clean package'
       }
     }
-	
-    stages {
-        stage('Test') {
+
+	stage('Test') {
             steps {
-                sh './gradlew check'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/reports/*.xml'
+                }
             }
         }
-    }
-    post {
-        always {
-            junit 'build/reports/**/*.xml'
-        }
-    }
     
     stage ('Deploy-to-Tomcat') {
       steps {
