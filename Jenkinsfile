@@ -50,6 +50,7 @@ pipeline {
      post {
        always {
          junit 'target/surefire-reports/TEST-*.xml'
+	 input 'Do you want to proceed?'
        }
 
        failure {
