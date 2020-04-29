@@ -10,7 +10,7 @@ REPORT_DIRECTORY="$DC_DIRECTORY/reports"
 if [ ! -d "$DATA_DIRECTORY" ]; then
     echo "Initially creating persistent directory: $DATA_DIRECTORY"
     mkdir -p "$DATA_DIRECTORY"
-#    chmod -R 777 "$DATA_DIRECTORY"
+    chmod -R 777 "$DATA_DIRECTORY"
 fi
 if [ ! -d "$CACHE_DIRECTORY" ]; then
     echo "Initially creating persistent directory: $CACHE_DIRECTORY"
@@ -19,7 +19,7 @@ fi
 if [ ! -d "$REPORT_DIRECTORY" ]; then
     echo "Initially creating report directory: $REPORT_DIRECTORY"
     mkdir -p "$REPORT_DIRECTORY"
-#    chmod -R 777 "$REPORT_DIRECTORY"
+    chmod -R 777 "$REPORT_DIRECTORY"
 fi
 
 
@@ -35,7 +35,7 @@ docker run --rm \
     owasp/dependency-check:$DC_VERSION \
     --scan /src \
     --format "ALL" \
-    --project "$DC_DIRECTORY/report" \
+    --project "$DC_DIRECTORY" \
     --out /report
     # Use suppression like this: (where /src == $pwd)
     # --suppression "/src/security/dependency-check-suppression.xml"
