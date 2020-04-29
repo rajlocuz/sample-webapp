@@ -5,7 +5,7 @@ DC_DIRECTORY=$HOME/OWASP-Dependency-Check
 DC_PROJECT="dependency-check scan: $(pwd)"
 DATA_DIRECTORY="$DC_DIRECTORY/data"
 CACHE_DIRECTORY="$DC_DIRECTORY/data/cache"
-REPORT_DIRECTORY=$pwd/reports
+REPORT_DIRECTORY="$DC_DIRECTORY/reports"
 
 if [ ! -d "$DATA_DIRECTORY" ]; then
     echo "Initially creating persistent directory: $DATA_DIRECTORY"
@@ -33,7 +33,7 @@ docker run --rm \
     owasp/dependency-check:$DC_VERSION \
     --scan /src \
     --format "ALL" \
-    --project "$DC_PROJECT" \
+    --project "$DC_DIRECTORY" \
     --out /report
     # Use suppression like this: (where /src == $pwd)
     # --suppression "/src/security/dependency-check-suppression.xml"
