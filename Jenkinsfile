@@ -16,16 +16,23 @@ pipeline {
     
    stage ('Check-Git-Secrets') {
       steps {
-	//sshagent (['Jenkins-key']) {
-	  //sh 'rm trufflehogjson || true'
           sh 'rm trufflehog || true'
-          //sh 'docker run rajlocuz/trufflehog --json https://github.com/rajlocuz/webapp.git > trufflehogjson'
-	  sh 'docker run rajlocuz/trufflehog --json  https://github.com/rajlocuz/sample-webapp.git > trufflehog'
+	  sh 'docker run dxa4481/trufflehog  https://github.com/rajlocuz/sample-webapp.git > trufflehog'
           sh 'cat trufflehog'
 	  input 'Do you want to proceed?'
-	//}
       }
     
+    }
+
+   stage ('Source Composition Analysis') {
+      steps {
+         sh 'rm owasp* || true'
+         sh 'wget "https://raw.githubusercontent.com/cehkunal/webapp/master/owasp-dependency-check.sh" '
+         sh 'chmod +x owasp-dependency-check.sh'
+         sh 'bash owasp-dependency-check.sh'
+         sh 'cat /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml'
+        
+      }
     }
 
     stage ('Build') {
