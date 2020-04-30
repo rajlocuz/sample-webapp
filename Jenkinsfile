@@ -96,7 +96,7 @@ pipeline {
       steps {
         sshagent (['tomcat']) {
           sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@35.154.212.147:/opt/tomcat/webapps/webapp.war'
-          input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
+          input 'Have you checked all vulnerability? Do you wish to deploy on Prod. Env.?'
         }
      }
     }
