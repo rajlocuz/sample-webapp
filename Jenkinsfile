@@ -19,7 +19,6 @@ pipeline {
           sh 'rm trufflehog || true'
 	  sh 'docker run rajlocuz/trufflehog  https://github.com/rajlocuz/sample-webapp.git > trufflehog'
           sh 'cat trufflehog'
-	  input 'Do you want to proceed?'
       }
     
     }
@@ -61,7 +60,7 @@ pipeline {
         stage('Integration Tests') {
           steps {
             sh 'mvn failsafe:integration-test'
-	      input 'Do you wish to continue?'
+            input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
           }
         }
      }
@@ -76,12 +75,32 @@ pipeline {
     }
    }   
  
-    stage ('Deploy-to-Tomcat') {
+    stage ('Deploy-to-Staging/QA') {
       steps {
         sshagent (['tomcat']) {
-          sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@35.154.212.147:/opt/tomcat/webapps/webapp.war'
+          sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@15.206.150.148:/opt/tomcat/webapps/webapp.war'
         }
      }
     }
+
+   stage ('DAST') {
+      steps {
+         sshagent(['zap']) {
+           sh 'ssh -o  StrictHostKeyChecking=no ec2-user@13.127.32.73 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://15.206.150.148:8080/webapp/" || true'
+           
+        }
+      }
+    }
+
+  stage ('Deploy-to-Prod') {
+      steps {
+        sshagent (['tomcat']) {
+          sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@35.154.212.147:/opt/tomcat/webapps/webapp.war'
+          input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
+        }
+     }
+    }
+
+
   }
 }
