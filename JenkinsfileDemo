@@ -81,7 +81,14 @@ pipeline {
       }
     }
 
-    
+    stage ('DAST') {
+      steps {
+        sshagent(['zap']) {
+          sh 'ssh -o  StrictHostKeyChecking=no ec2-user@13.127.32.73 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://15.206.150.148:8080/webapp/" || true'
+           
+        }
+      }
+    }
 
     stage ('Deploy-to-Prod') {
       steps {
