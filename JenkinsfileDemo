@@ -14,7 +14,13 @@ pipeline {
       }
     }
     
-     
+     stage ('Check-Git-Secrets') {
+      steps {
+        sh 'rm trufflehog || true'
+        sh 'docker run rajlocuz/trufflehog  https://github.com/rajlocuz/sample-webapp.git > trufflehog'
+        sh 'cat trufflehog'
+      }
+    }    
 
   stage ('Build') {
     steps {
