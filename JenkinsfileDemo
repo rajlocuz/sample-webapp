@@ -32,14 +32,7 @@ pipeline {
       }
     }
      
-    stage ('SAST') {
-      steps {
-        withSonarQubeEnv('sonar') {
-          sh 'mvn sonar:sonar'
-          sh 'cat target/sonar/report-task.txt'
-        }
-      }
-    }
+ 
     
   stage ('Build') {
     steps {
@@ -48,48 +41,12 @@ pipeline {
   }
     
  
-stage ('Tests') {
-      parallel {
-    	stage('Unit Tests') {
-      	  steps {
-            sh 'mvn surefire:test'
-          } 
-        }
-
-        stage('Integration Tests') {
-          steps {
-            sh 'mvn failsafe:integration-test'
-            input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
-          }
-        }
-      }
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: 'target/surefire-reports/Test-*.xml'
-        }
-
-        failure {
-          mail to: 'raj.singh@locuz.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
-        }
-      }
-    }   
- 
-    stage ('Deploy-to-Staging/QA') {
-      steps {
-        sshagent (['tomcat']) {
-          sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@15.206.150.148:/opt/tomcat/webapps/webapp.war'
-	  input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA. Env.?'
-        }
-      }
-    }
-
-    
 
     stage ('Deploy-to-Prod') {
       steps {
         sshagent (['tomcat']) {
           sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@35.154.212.147:/opt/tomcat/webapps/webapp.war'
-          input 'Have you checked all vulnerability? Do you wish to deploy on Prod. Env.?'
+         
         }
       }
     }
