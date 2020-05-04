@@ -59,7 +59,7 @@ stage ('Tests') {
         stage('Integration Tests') {
           steps {
             sh 'mvn failsafe:integration-test'
-     #       input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
+     //       input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
           }
         }
       }
