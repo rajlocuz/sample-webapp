@@ -48,42 +48,6 @@ pipeline {
   }
     
  
-stage ('Tests') {
-      parallel {
-    	stage('Unit Tests') {
-      	  steps {
-            sh 'mvn surefire:test'
-          } 
-        }
-
-        stage('Integration Tests') {
-          steps {
-            sh 'mvn failsafe:integration-test'
-          }
-        }
-      }
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: 'target/surefire-reports/Test-*.xml'
-        }
-
-        failure {
-          mail to: 'raj.singh@locuz.com', subject: 'The Pipeline failed :(', body:'The Pipeline failed :('
-        }
-      }
-    }   
- 
-    stage ('Deploy-to-Staging/QA') {
-      steps {
-        sshagent (['tomcat']) {
-	  input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
-          sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@15.206.150.148:/opt/tomcat/webapps/webapp.war'
-          input 'Have you checked all vulnerability? Do you wish to deploy on Prod.?'
-        }
-      }
-    }
-
-    
 
     stage ('Deploy-to-Prod') {
       steps {
