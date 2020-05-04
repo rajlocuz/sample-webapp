@@ -59,14 +59,12 @@ stage ('Tests') {
         stage('Integration Tests') {
           steps {
             sh 'mvn failsafe:integration-test'
-     //       input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
           }
         }
       }
       post {
         always {
           junit allowEmptyResults: true, testResults: 'target/surefire-reports/Test-*.xml'
-	input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
         }
 
         failure {
@@ -78,8 +76,9 @@ stage ('Tests') {
     stage ('Deploy-to-Staging/QA') {
       steps {
         sshagent (['tomcat']) {
+	  input 'Have you checked all vulnerability? Do you wish to deploy on Staging/QA Env.?'
           sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@15.206.150.148:/opt/tomcat/webapps/webapp.war'
-		  input 'Have you checked all vulnerability? Do you wish to deploy on Prod.?'
+          input 'Have you checked all vulnerability? Do you wish to deploy on Prod.?'
         }
       }
     }
